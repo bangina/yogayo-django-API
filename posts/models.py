@@ -2,9 +2,11 @@ from django.db import models
 from django.db import models
 from django.contrib.auth.models import User
 from users.models import User
+from users.models import GenUser
+
 
 class Post(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(GenUser, on_delete=models.CASCADE)
     category = models.CharField(max_length=10, null=False)
     title = models.CharField(max_length=100, null=False)
     content = models.CharField(max_length=2000, null=False)

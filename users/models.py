@@ -50,7 +50,7 @@ class AdminUserManager(models.Manager):
 
 #
 # proxy 모델 정의
-#
+# 
 
 class GenUser(User):
     base_type = User.Types.GENUSER
