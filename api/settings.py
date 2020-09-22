@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'bookings.apps.BookingsConfig',
     'diaries.apps.DiariesConfig',
     'posts.apps.PostsConfig',
+    'schema_graph',
 ]
 
 MIDDLEWARE = [
@@ -128,3 +129,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+GRAPH_MODELS = {
+    'all_applications': True,
+    'group_models': True,
+}

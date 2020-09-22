@@ -4,8 +4,8 @@ from users.models import User
 
 
 class Lesson(models.Model):
+    # 센터 user
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    # studio_id = models.CharField(max_length=20)
     name = models.CharField(max_length=20, blank=True, null=True)
     room = models.CharField(max_length=20, blank=True, null=True)
     date = models.DateField(blank=True, null=True)
@@ -28,22 +28,6 @@ class Voucher(models.Model):
         db_table = 'voucher'
 
 
-class UserLesson(models.Model):
-    lesson = models.ForeignKey(Lesson,  on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    # voucher 삭제되면 얘도 삭제되는게 맞나? 바우처 포린키 없어도 되지?
-    voucher = models.ForeignKey(Voucher, on_delete=models.CASCADE)
-    name = models.CharField(max_length=20, blank=True, null=True)
-    room = models.CharField(max_length=20, blank=True, null=True)
-    date = models.DateField(blank=True, null=True)
-    time = models.TimeField(blank=True, null=True)
-    max_ppl = models.IntegerField(blank=True, null=True)
-
-    class Meta:
-        db_table = 'user_lesson'
-        ordering = ['-time']
-
-
 class VoucherUser(models.Model):
     voucher = models.ForeignKey(Voucher, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -54,3 +38,17 @@ class VoucherUser(models.Model):
 
     class Meta:
         db_table = 'voucher_user'
+
+
+class UserLesson(models.Model):
+    lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=20, blank=True, null=True)
+    room = models.CharField(max_length=20, blank=True, null=True)
+    date = models.DateField(blank=True, null=True)
+    time = models.TimeField(blank=True, null=True)
+    max_ppl = models.IntegerField(blank=True, null=True)
+
+    class Meta:
+        db_table = 'user_lesson'
+        ordering = ['-time']
