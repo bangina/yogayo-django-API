@@ -42,11 +42,15 @@ INSTALLED_APPS = [
     'diaries.apps.DiariesConfig',
     'posts.apps.PostsConfig',
     'schema_graph',
+    'rest_framework',
+    'drf_yasg',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -132,3 +136,5 @@ GRAPH_MODELS = {
     'all_applications': True,
     'group_models': True,
 }
+
+CORS_ORIGIN_ALLOW_ALL = True
