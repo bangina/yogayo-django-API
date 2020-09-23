@@ -33,7 +33,6 @@ class VoucherUser(models.Model):
     voucher = models.ForeignKey(Voucher, on_delete=models.CASCADE)
     user = models.ForeignKey(GenUser, on_delete=models.CASCADE)
     str_date = models.DateTimeField(auto_now_add=True)
-    # end_date = models.DateField(blank=True, null=True) ##보관할 데이터 아니고 계산해야 하는 데이터니까 컬럼 필요없지 않을까?
     used = models.IntegerField(blank=True, default=0)  # 바우처 수업 사용횟수
     status = models.BooleanField(blank=True, default=True)  # 정상/만료
 
