@@ -7,7 +7,7 @@ class Diary(models.Model):
     userLesson = models.ForeignKey(UserLesson, on_delete=models.CASCADE)
     content = models.CharField(max_length=1000, null=False)
     mood = models.IntegerField(null=False)
-    img_path = models.CharField(max_length=500, null=True)
+    img_path = models.FileField(max_length=500, null=True)
     created = models.DateTimeField(auto_now_add=True)
 
     class Meta:

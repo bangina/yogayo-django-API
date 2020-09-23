@@ -18,7 +18,7 @@ class User(AbstractBaseUser):
     is_superuser = models.BooleanField(default=False)
     # 우리가 추가하는 필드
     phone = models.CharField(max_length=11, null=True, unique=True)
-    img_profile = models.ImageField(upload_to='user', blank=True)
+    img_profile = models.FileField(upload_to='user', blank=True)
 
     # 로그인에 사용할(auth) 컬럼 지정.
     USERNAME_FIELD = 'email'
