@@ -32,7 +32,8 @@ class Post(models.Model):
 class Comment(models.Model):
     post = models.ForeignKey(
         Post, on_delete=models.CASCADE)
-    user = models.ForeignKey(GenUser, on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        GenUser, on_delete=models.CASCADE)
     content = models.CharField(max_length=500,  null=False)
     created = models.DateTimeField(auto_now_add=True)
 
