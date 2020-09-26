@@ -3,18 +3,17 @@ from .models import Post, Comment
 
 
 class PostSerializer(serializers.ModelSerializer):
-    # poster = username
-    poster = serializers.ReadOnlyField(source="user.username")
 
     class Meta:
         model = Post
         fields = [
+            'user',
             'category',
             'title',
             'content',
             'img_path',
             'created',
-            'views',
+            'views'
         ]
 
 

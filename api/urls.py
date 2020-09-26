@@ -2,7 +2,9 @@
 from django.contrib import admin
 from django.urls import path, include, re_path
 from schema_graph.views import Schema
-from posts import views
+from posts.views import PostList, PostRetrieveDestroy
+from diaries.views import DiaryList, DiaryRetrieveDestroy
+
 
 from rest_framework import routers, permissions
 from drf_yasg.views import get_schema_view
@@ -24,12 +26,13 @@ schema_view = get_schema_view(
 urlpatterns = [
     path("schema/", Schema.as_view()),
     path('admin/', admin.site.urls),
-    path("api/posts/", views.PostList.as_view()),  # Post 리스트 뷰
+    path("api/diaries/", DiaryList.as_view()),
+    path("api/diaries/<int:pk>", DiaryRetrieveDestroy.as_view()),
+    path("api/posts/", PostList.as_view()),  # Post 리스트 뷰
+    path("api/posts/<int:pk>", PostRetrieveDestroy.as_view()),  # Post 리스트 뷰
+    path('api-auth/', include('rest_framework.urls')),
 
-
-
-
-
+    # SWAGGER
     re_path(r'^swagger(?P<format>\.json|\.yaml)$',
             schema_view.without_ui(cache_timeout=0), name='schema-json'),
     re_path(r'^swagger/$', schema_view.with_ui('swagger',
