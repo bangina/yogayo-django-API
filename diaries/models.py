@@ -1,6 +1,7 @@
 from django.db import models
 from users.models import User
 from bookings.models import UserLesson
+from users.models import GenUser
 
 
 class Diary(models.Model):
@@ -19,6 +20,8 @@ class Like(models.Model):
     diary = models.ForeignKey(Diary, on_delete=models.CASCADE)
     status = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(
+        GenUser, on_delete=models.CASCADE, default=0)
 
     class Meta:
         db_table = 'like'
