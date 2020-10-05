@@ -34,6 +34,7 @@ urlpatterns = [
     path("api/posts/", PostList.as_view()),  # Post 리스트 뷰
     path("api/posts/<int:pk>", PostRetrieveDestroy.as_view()),  # Post 리스트 뷰
     path('api-auth/', include('rest_framework.urls')),
+    path('api/lesson/', include('bookings.urls')),
 
     # SWAGGER
     re_path(r'^swagger(?P<format>\.json|\.yaml)$',
