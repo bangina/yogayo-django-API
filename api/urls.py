@@ -4,6 +4,7 @@ from django.urls import path, include, re_path
 from schema_graph.views import Schema
 from posts.views import PostList, PostRetrieveDestroy
 from diaries.views import DiaryList, DiaryRetrieveDestroy, LikeCreate
+from users.views import (registration_view)
 
 
 from rest_framework import routers, permissions
@@ -11,6 +12,7 @@ from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from django.conf import settings
 from django.conf.urls.static import static
+from rest_framework.authtoken import views
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -28,6 +30,9 @@ schema_view = get_schema_view(
 urlpatterns = [
     path("schema/", Schema.as_view()),
     path('admin/', admin.site.urls),
+    path('api/get_token/', views.obtain_auth_token),
+    path('api/register/', registration_view, name="register"),
+
     path("api/diaries/", DiaryList.as_view()),
     path("api/diaries/<int:pk>", DiaryRetrieveDestroy.as_view()),
     path("api/diaries/<int:pk>/like", LikeCreate.as_view()),
@@ -43,7 +48,3 @@ urlpatterns = [
     re_path(r'^redoc/$', schema_view.with_ui('redoc',
                                              cache_timeout=0), name='schema-redoc'),
 ]
-# 개발 디버깅 모드에서 업로드된 파일을 다운로드하기 위한 URL주소와 물리경로 설정! /media/파일명.확장자
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL,
-                          document_root=settings.MEDIA_ROOT)

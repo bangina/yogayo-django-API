@@ -5,6 +5,7 @@ from users.models import GenUser
 
 
 class Diary(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     userLesson = models.ForeignKey(UserLesson, on_delete=models.CASCADE)
     content = models.CharField(max_length=1000, null=False)
     mood = models.IntegerField(null=False)

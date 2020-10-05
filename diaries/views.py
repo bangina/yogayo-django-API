@@ -4,17 +4,24 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 from .models import Diary, Like
 from .serializers import DiarySerializer, LikeSerializer
+from rest_framework.authentication import TokenAuthentication
 
 
 class DiaryList(generics.ListCreateAPIView):
-
-    queryset = Diary.objects.all()
     serializer_class = DiarySerializer
-
+    #인증방식 : Token
+    authentication_classes = (TokenAuthentication,)
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+
+    def get_queryset(self):
+        # 요청하는 사람 리스트만 보여주기
+        user = self.request.user
+        return Diary.objects.filter(user=user).order_by(
+            '-created')
+        # 로그인이 안됨
 
 
 class DiaryRetrieveDestroy(generics.RetrieveDestroyAPIView):
