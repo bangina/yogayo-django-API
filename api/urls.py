@@ -3,8 +3,9 @@ from django.contrib import admin
 from django.urls import path, include, re_path
 from schema_graph.views import Schema
 from posts.views import PostList, PostRetrieveDestroy
-from diaries.views import DiaryList, DiaryRetrieveDestroy, LikeCreate
+from diaries.views import DiaryList, DiaryRetrieveDestroy, LikeCreate, ImgUploadView
 from users.views import (registration_view)
+from bookings.views import LessonDayArchiveView
 
 
 from rest_framework import routers, permissions
@@ -35,11 +36,14 @@ urlpatterns = [
 
     path("api/diaries/", DiaryList.as_view()),
     path("api/diaries/<int:pk>", DiaryRetrieveDestroy.as_view()),
+    path("api/diaries/<int:pk>/upload", ImgUploadView.as_view()),
     path("api/diaries/<int:pk>/like", LikeCreate.as_view()),
     path("api/posts/", PostList.as_view()),  # Post 리스트 뷰
     path("api/posts/<int:pk>", PostRetrieveDestroy.as_view()),  # Post 리스트 뷰
     path('api-auth/', include('rest_framework.urls')),
-    path('api/lesson/', include('bookings.urls')),
+    re_path(r'^(api/lesson/?P<year>\d{4})/(?P<month>\d{1,2})/(?P<day>\d{1,2})/$',
+            LessonDayArchiveView.as_view()),
+
 
     # SWAGGER
     re_path(r'^swagger(?P<format>\.json|\.yaml)$',
@@ -49,3 +53,7 @@ urlpatterns = [
     re_path(r'^redoc/$', schema_view.with_ui('redoc',
                                              cache_timeout=0), name='schema-redoc'),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL,
+                          document_root=settings.MEDIA_ROOT)

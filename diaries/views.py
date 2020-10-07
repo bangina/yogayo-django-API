@@ -5,6 +5,8 @@ from rest_framework.response import Response
 from .models import Diary, Like
 from .serializers import DiarySerializer, LikeSerializer
 from rest_framework.authentication import TokenAuthentication
+from rest_framework.views import APIView
+from rest_framework.parsers import FileUploadParser
 
 
 class DiaryList(generics.ListCreateAPIView):
@@ -21,7 +23,6 @@ class DiaryList(generics.ListCreateAPIView):
         user = self.request.user
         return Diary.objects.filter(user=user).order_by(
             '-created')
-        # 로그인이 안됨
 
 
 class DiaryRetrieveDestroy(generics.RetrieveDestroyAPIView):
@@ -61,3 +62,21 @@ class LikeCreate(generics.CreateAPIView, mixins.DestroyModelMixin):
             return Response(status=status.HTTP_204_NO_CONTENT)
         else:
             raise ValidationError("좋아요하신적이 없는데?뭘 삭제하신단건지..")
+
+
+# 이미지 업로드뷰
+class ImgUploadView(APIView):
+    parser_class = (FileUploadParser,)
+    serializer_class = DiarySerializer
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+    def post(self, request, *args, **kwargs):
+        file_serializer = DiarySerializer(data=request.data)
+
+        if file_serializer.is_valid():
+            file_serializer.save()
+            return Response(file_serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(file_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
