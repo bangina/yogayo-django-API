@@ -6,7 +6,8 @@ from .serializers import PostSerializer
 
 
 class PostList(generics.ListCreateAPIView):
-    queryset = Post.objects.all()  # DB에서 쿼리셋 전부 가져왕
+    queryset = Post.objects.all().order_by(
+        '-created')  # DB에서 쿼리셋 전부 가져왕
     serializer_class = PostSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
