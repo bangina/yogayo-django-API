@@ -5,7 +5,7 @@ from schema_graph.views import Schema
 from posts.views import PostList, PostRetrieveDestroy
 from diaries.views import DiaryList, DiaryRetrieveDestroy, LikeCreate, ImgUploadView
 from users.views import (registration_view)
-from bookings.views import LessonDayArchiveView
+from bookings.views import LessonList, MyLessonList, LessonUsersList
 
 
 from rest_framework import routers, permissions
@@ -41,8 +41,9 @@ urlpatterns = [
     path("api/posts/", PostList.as_view()),  # Post 리스트 뷰
     path("api/posts/<int:pk>", PostRetrieveDestroy.as_view()),  # Post 리스트 뷰
     path('api-auth/', include('rest_framework.urls')),
-    re_path(r'^(api/lesson/?P<year>\d{4})/(?P<month>\d{1,2})/(?P<day>\d{1,2})/$',
-            LessonDayArchiveView.as_view()),
+    path('api/lessons/<str:date>/', LessonList.as_view()),
+    path('api/mylessons/', MyLessonList.as_view()),
+    path('api/lesson/<int:lesson>/', LessonUsersList.as_view()),
 
 
     # SWAGGER
