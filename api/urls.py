@@ -40,7 +40,7 @@ urlpatterns = [
     path("api/diaries/<int:pk>/like", LikeCreate.as_view()),
     path("api/posts/", PostList.as_view()),  # Post 리스트 뷰
     path("api/posts/<int:pk>", PostRetrieveDestroy.as_view()),  # Post 리스트 뷰
-    path("api/posts/<int:pk>/comment", CommentList.as_view()),
+    path("api/posts/<int:pk>/comment/", CommentList.as_view()),
     path('api-auth/', include('rest_framework.urls')),
     path('api/lessons/<str:date>/', LessonList.as_view()),
     path('api/mylessons/', MyLessonList.as_view()),
