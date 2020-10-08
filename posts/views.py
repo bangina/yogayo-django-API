@@ -41,7 +41,7 @@ class CommentList(generics.ListCreateAPIView):
     def get_queryset(self):
         post = Post.objects.get(pk=self.kwargs['pk'])
         return Comment.objects.filter(post=post).order_by(
-            '-created')
+            'created')
 
     def perform_create(self, serializer):
         # 시리얼라이저야, 저장할 때 poster컬럼은 POST요청자 이름을 넣어
