@@ -35,8 +35,8 @@ class PostRetrieveDestroy(generics.RetrieveDestroyAPIView):
 class CommentList(generics.ListCreateAPIView):
     serializer_class = CommentSerializer
 
-    # authentication_classes = (TokenAuthentication,)
-    # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = [permissions.AllowAny]
 
     def get_queryset(self):
         post = Post.objects.get(pk=self.kwargs['pk'])
