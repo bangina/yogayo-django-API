@@ -21,10 +21,10 @@ def registration_view(request):
             data = serializer.errors
         return Response(data)
 
-
+#유저 개인 정보 조회
 class UserView(generics.ListAPIView):
-    # authentication_classes = (TokenAuthentication,)
-    # permission_classes = [permissions.IsAuthenticated]
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = [permissions.IsAuthenticated]
     serializer_class = UserSerializer
 
     def get_queryset(self):
@@ -34,7 +34,7 @@ class UserView(generics.ListAPIView):
 
 
 class UserUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
-    # authentication_classes = (TokenAuthentication,)
-    # permission_classes = [permissions.IsAuthenticated]
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = [permissions.IsAuthenticated]
     queryset = User.objects.all()
     serializer_class = UserSerializer

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Lesson, UserLesson
+from .models import Lesson, UserLesson, VoucherUser, Voucher
 from django.contrib.auth.models import User
 
 
@@ -14,7 +14,12 @@ class LessonSerializer(serializers.ModelSerializer):
 
 
 class UserLessonSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = UserLesson
+        fields = '__all__'
+
+
+class BookingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = VoucherUser
         fields = '__all__'
