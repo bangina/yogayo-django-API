@@ -2,7 +2,6 @@ from django.shortcuts import render
 from rest_framework import generics
 from .models import Lesson, UserLesson
 from .serializers import LessonSerializer, UserLessonSerializer
-from django.views.generic.dates import DayArchiveView
 
 
 # 날짜별 수업 목록

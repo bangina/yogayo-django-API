@@ -4,7 +4,7 @@ from django.urls import path, include, re_path
 from schema_graph.views import Schema
 from posts.views import PostList, PostRetrieveDestroy, CommentList
 from diaries.views import DiaryList, DiaryRetrieveDestroy, LikeCreate, ImgUploadView
-from users.views import (registration_view)
+from users.views import registration_view, UserView, UserUpdateDestroyView
 from bookings.views import LessonList, MyLessonList, LessonUsersList
 
 
@@ -34,6 +34,8 @@ urlpatterns = [
     path('api/get_token/', views.obtain_auth_token),
     path('api/register/', registration_view, name="register"),
 
+    path("api/myinfo/", UserView.as_view()),
+    path("api/myinfo/<int:pk>/", UserUpdateDestroyView.as_view()),
     path("api/diaries/", DiaryList.as_view()),
     path("api/diaries/<int:pk>/", DiaryRetrieveDestroy.as_view()),
     path("api/diaries/<int:pk>/upload/", ImgUploadView.as_view()),
@@ -45,6 +47,7 @@ urlpatterns = [
     path('api/lessons/<str:date>/', LessonList.as_view()),
     path('api/mylessons/', MyLessonList.as_view()),
     path('api/lesson/<int:lesson>/', LessonUsersList.as_view()),
+
 
 
     # SWAGGER
