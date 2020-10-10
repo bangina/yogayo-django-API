@@ -10,7 +10,7 @@ class LessonSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Lesson
-        fields = ['username', 'name', 'room', 'date', 'time', 'max_ppl']
+        fields = ['id', 'username', 'name', 'room', 'date', 'time', 'max_ppl']
 
 
 class UserLessonSerializer(serializers.ModelSerializer):
