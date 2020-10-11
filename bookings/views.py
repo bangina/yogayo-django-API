@@ -1,12 +1,10 @@
 from django.shortcuts import render
-from rest_framework import generics, permissions, status
+from rest_framework import generics, permissions, status, mixins
 from .models import Lesson, UserLesson, VoucherUser, Voucher
 from .serializers import LessonSerializer, UserLessonSerializer, BookingSerializer
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
-from django.contrib import messages
-from django.http import HttpResponse
 # 날짜별 수업 목록
 
 
@@ -34,19 +32,31 @@ class MyLessonList(generics.ListCreateAPIView):
         user = self.request.user
         return UserLesson.objects.filter(user=user)
 
+# 수강신청 & 취소 처리
+
+
+class UserLessonCreate(generics.CreateAPIView, mixins.DestroyModelMixin):
+    serializer_class = UserLessonSerializer
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        lesson = Lesson.objects.get(pk=self.kwargs['pk'])
+        return UserLesson.objects.filter(user=user, lesson=lesson)
+
     def perform_create(self, serializer):
-        lesson = self.request.data.get("lesson")
-        user = self.request.data.get("user")
-        userLesson = UserLesson.objects.filter(
-            user=user, lesson=lesson).all()
-        if userLesson.exists():
-            print(userLesson)
-            return HttpResponse("이미 있는데")
-            # return Response(status=status.HTTP_400_BAD_REQUEST)
+        if self.get_queryset().exists():
+            raise ValidationError("이미 수강신청하셨어요. :)")
+        serializer.save(user=self.request.user,
+                        lesson=Lesson.objects.get(pk=self.kwargs['pk']))
+
+    def delete(self, request, *args, **kwargs):
+        if self.get_queryset().exists():
+            self.get_queryset().delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
         else:
-            print("없음")
-        #     serializer.save(user=self.request.user)
-        #     return Response(serializer.data, status=status.HTTP_201_CREATED)
+            raise ValidationError("이 수업을 수강신청하신 적이 없어요.", code=None)
 
 
 # 수업별 신청 회원리스트 뷰

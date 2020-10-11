@@ -5,7 +5,7 @@ from schema_graph.views import Schema
 from posts.views import PostList, PostRetrieveDestroy, CommentList
 from diaries.views import DiaryList, DiaryRetrieveDestroy, LikeCreate, ImgUploadView
 from users.views import registration_view, UserView, UserUpdateDestroyView
-from bookings.views import LessonList, MyLessonList, LessonUsersList, UserVoucherList
+from bookings.views import LessonList, MyLessonList, LessonUsersList, UserVoucherList, UserLessonCreate
 
 
 from rest_framework import routers, permissions
@@ -46,6 +46,7 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls')),
     path('api/lessons/<str:date>/', LessonList.as_view()),
     path('api/mylessons/', MyLessonList.as_view()),
+    path('api/mylessons/<int:pk>/', UserLessonCreate.as_view()),
     path('api/lesson/<int:lesson>/', LessonUsersList.as_view()),
 
 
