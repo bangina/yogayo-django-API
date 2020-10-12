@@ -62,3 +62,10 @@ class CommentList(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         # 시리얼라이저야, 저장할 때 poster컬럼은 POST요청자 이름을 넣어
         serializer.save(user=self.request.user)
+
+class Category(generics.ListAPIView):
+    serializer_class = PostSerializer
+
+    def get_queryset(self):
+        return Post.objects.filter(category=self.kwargs['category'])
+
