@@ -6,11 +6,13 @@ class DiarySerializer(serializers.ModelSerializer):
 
     # ADDITIONAL FIELD
     likes = serializers.SerializerMethodField()
+    username = serializers.CharField(
+        source='user.username', read_only=True)
 
     class Meta:
         model = Diary
         fields = ['id', 'userLesson', 'userLesson_id', 'content',  'mood', 'img_path',
-                  'created', 'likes']
+                  'created', 'likes', 'username']
 
     def get_likes(self, diary):
         return Like.objects.filter(diary=diary).count()

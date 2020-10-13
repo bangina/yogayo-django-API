@@ -34,22 +34,6 @@ class PostList(generics.ListCreateAPIView):
             return Response(file_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class FileUploadView(APIView):
-    parser_class = (FileUploadParser,)
-    authentication_classes = (TokenAuthentication,)
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-
-    def post(self, request, *args, **kwargs):
-
-        file_serializer = PostSerializer(data=request.data)
-
-        if file_serializer.is_valid():
-            file_serializer.save(user=self.request.user)
-            return Response(file_serializer.data, status=status.HTTP_201_CREATED)
-        else:
-            return Response(file_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
 class PostRetrieveDestroy(generics.RetrieveDestroyAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
@@ -79,6 +63,13 @@ class CommentList(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         # 시리얼라이저야, 저장할 때 poster컬럼은 POST요청자 이름을 넣어
         serializer.save(user=self.request.user)
+
+
+class MyPostList(generics.ListAPIView):
+    serializer_class = PostSerializer
+
+    def get_queryset(self):
+        return Post.objects.filter(user=1)
 
 
 class Category(generics.ListAPIView):
