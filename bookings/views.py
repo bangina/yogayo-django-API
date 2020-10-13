@@ -51,9 +51,15 @@ class UserLessonCreate(generics.CreateAPIView, mixins.DestroyModelMixin):
             raise ValidationError("이미 수강신청하셨어요. :)")
         serializer.save(user=self.request.user,
                         lesson=Lesson.objects.get(pk=self.kwargs['pk']))
-        voucher = VoucherUser.objects.filter(
+        # 회원 수강권 1회 차감 처리
+        voucherUser = VoucherUser.objects.filter(
             user=self.request.user, status=True)
-        voucher.update(used=F('used') + 1)
+        voucherUser.update(used=F('used') + 1)
+
+        # 수강권 모두 소진시 상태 false로 변경
+        # voucher = Voucher.objects.filter(voucher_id=voucherUser.voucher)
+        # if voucherUser.used == voucher.limit:
+        #     voucherUser.update(status=False)
 
     def delete(self, request, *args, **kwargs):
         if self.get_queryset().exists():
