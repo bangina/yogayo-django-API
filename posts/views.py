@@ -67,9 +67,11 @@ class CommentList(generics.ListCreateAPIView):
 
 class MyPostList(generics.ListAPIView):
     serializer_class = PostSerializer
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def get_queryset(self):
-        return Post.objects.filter(user=1)
+        return Post.objects.filter(user=self.request.user)
 
 
 class Category(generics.ListAPIView):
