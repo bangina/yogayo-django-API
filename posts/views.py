@@ -34,20 +34,14 @@ class PostList(generics.ListCreateAPIView):
             return Response(file_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class FileUploadView(APIView):
-    parser_class = (FileUploadParser,)
+class MyPostList(generics.ListAPIView):
+    serializer_class = PostSerializer
     authentication_classes = (TokenAuthentication,)
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
-    def post(self, request, *args, **kwargs):
-
-        file_serializer = PostSerializer(data=request.data)
-
-        if file_serializer.is_valid():
-            file_serializer.save(user=self.request.user)
-            return Response(file_serializer.data, status=status.HTTP_201_CREATED)
-        else:
-            return Response(file_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def get_queryset(self):
+        return Post.objects.filter(user=self.request.user).order_by(
+            'created')
 
 
 class PostRetrieveDestroy(generics.RetrieveDestroyAPIView):
