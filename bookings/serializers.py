@@ -20,6 +20,13 @@ class UserLessonSerializer(serializers.ModelSerializer):
 
 
 class BookingSerializer(serializers.ModelSerializer):
+
+    limit = serializers.IntegerField(source='voucher.limit', read_only=True)
+    vouchername = serializers.CharField(source='voucher.name', read_only=True)
+    adminname = serializers.CharField(
+        source='voucher.user.username', read_only=True)
+
     class Meta:
         model = VoucherUser
-        fields = '__all__'
+        fields = ['id', 'status', 'str_date',
+                  'used', 'user', 'vouchername', 'limit', 'adminname']
