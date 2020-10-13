@@ -7,6 +7,7 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.parsers import FileUploadParser
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.views import APIView
 
 
 class PostList(generics.ListCreateAPIView):
@@ -21,6 +22,22 @@ class PostList(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         # 시리얼라이저야, 저장할 때 poster컬럼은 POST요청자 이름을 넣어
         serializer.save(user=self.request.user)
+
+    def post(self, request, *args, **kwargs):
+
+        file_serializer = PostSerializer(data=request.data)
+
+        if file_serializer.is_valid():
+            file_serializer.save(user=self.request.user)
+            return Response(file_serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(file_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class FileUploadView(APIView):
+    parser_class = (FileUploadParser,)
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def post(self, request, *args, **kwargs):
 
@@ -63,9 +80,9 @@ class CommentList(generics.ListCreateAPIView):
         # 시리얼라이저야, 저장할 때 poster컬럼은 POST요청자 이름을 넣어
         serializer.save(user=self.request.user)
 
+
 class Category(generics.ListAPIView):
     serializer_class = PostSerializer
 
     def get_queryset(self):
         return Post.objects.filter(category=self.kwargs['category'])
-
