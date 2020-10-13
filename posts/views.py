@@ -8,6 +8,7 @@ from rest_framework.parsers import FileUploadParser
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
+from django.db.models import F
 
 
 class PostList(generics.ListCreateAPIView):
@@ -38,8 +39,14 @@ class PostRetrieveDestroy(generics.RetrieveDestroyAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
 
-    # 삭제하는 함수
+    # 조회수 1 증가 함수
+    def get_queryset(self, **kwargs):
+        queryset = Post.objects.filter(pk=self.kwargs['pk'])
+        queryset.update(views=F('views') + 1)
+        print("view 추가")
+        return queryset
 
+    # 삭제하는 함수
     def delete(self, request, *args, **kwargs):
         post = Post.objects.filter(
             pk=self.kwargs['pk'], user=self.request.user)
