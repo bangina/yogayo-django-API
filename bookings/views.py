@@ -5,6 +5,7 @@ from .serializers import LessonSerializer, UserLessonSerializer, BookingSerializ
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
+from django.db.models import F
 # 날짜별 수업 목록
 
 
@@ -50,11 +51,18 @@ class UserLessonCreate(generics.CreateAPIView, mixins.DestroyModelMixin):
             raise ValidationError("이미 수강신청하셨어요. :)")
         serializer.save(user=self.request.user,
                         lesson=Lesson.objects.get(pk=self.kwargs['pk']))
+        voucher = VoucherUser.objects.filter(
+            user=self.request.user, status=True)
+        voucher.update(used=F('used') + 1)
 
     def delete(self, request, *args, **kwargs):
         if self.get_queryset().exists():
             self.get_queryset().delete()
+            voucher = VoucherUser.objects.filter(
+                user=self.request.user, status=True)
+            voucher.update(used=F('used') - 1)
             return Response(status=status.HTTP_204_NO_CONTENT)
+
         else:
             raise ValidationError("이 수업을 수강신청하신 적이 없어요.", code=None)
 
