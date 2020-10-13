@@ -68,6 +68,8 @@ class LikeCreate(generics.CreateAPIView, mixins.DestroyModelMixin):
 class ImgUploadView(APIView):
     parser_class = (FileUploadParser,)
     serializer_class = DiarySerializer
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = [permissions.IsAuthenticated]
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)

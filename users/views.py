@@ -21,7 +21,9 @@ def registration_view(request):
             data = serializer.errors
         return Response(data)
 
-#유저 개인 정보 조회
+# 유저 개인 정보 조회
+
+
 class UserView(generics.ListAPIView):
     authentication_classes = (TokenAuthentication,)
     permission_classes = [permissions.IsAuthenticated]
