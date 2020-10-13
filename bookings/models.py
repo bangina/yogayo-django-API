@@ -43,6 +43,7 @@ class VoucherUser(models.Model):
 class UserLesson(models.Model):
     lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE)
     user = models.ForeignKey(GenUser, on_delete=models.CASCADE)
+    voucher = models.IntegerField(null=False, blank=False)
     name = models.CharField(max_length=20, blank=True, null=True)
     room = models.CharField(max_length=20, blank=True, null=True)
     date = models.DateField(blank=True, null=True)
