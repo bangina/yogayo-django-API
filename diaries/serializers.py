@@ -10,11 +10,13 @@ class DiarySerializer(serializers.ModelSerializer):
         source='user.username', read_only=True)
     admin_name = serializers.CharField(
         source='userLesson.lesson.user.username', read_only=True)
+    lesson_name = serializers.CharField(
+        source='userLesson.lesson.name', read_only=True)
 
     class Meta:
         model = Diary
         fields = ['id', 'userLesson', 'userLesson_id', 'content',  'mood', 'img_path',
-                  'created', 'likes', 'username', 'admin_name']
+                  'created', 'likes', 'username', 'admin_name', 'lesson_name']
 
     def get_likes(self, diary):
         return Like.objects.filter(diary=diary).count()

@@ -1,11 +1,12 @@
 from django.shortcuts import render
 from rest_framework import generics, permissions, status, mixins
 from .models import Lesson, UserLesson, VoucherUser, Voucher
-from .serializers import LessonSerializer, UserLessonSerializer, BookingSerializer
+from .serializers import LessonSerializer, UserLessonSerializer, BookingSerializer, DiaryLessonSerializer
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 from django.db.models import F
+from datetime import datetime, timedelta
 # 날짜별 수업 목록
 
 
@@ -96,3 +97,19 @@ class UserVoucherList(generics.ListAPIView):
         return VoucherUser.objects.filter(user=user)
 
 # 이용권 정보
+
+# 다이어리 작성 가능한 수업
+
+
+class DiaryLessonList(generics.ListAPIView):
+    serializer_class = DiaryLessonSerializer
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = [permissions.AllowAny]
+
+    def get_queryset(self):
+
+        today = datetime.today()
+        yesterday = today + timedelta(days=-1)
+
+        user = self.request.user
+        return UserLesson.objects.filter(date__range=[yesterday, today], user=user)

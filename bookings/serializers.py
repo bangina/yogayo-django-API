@@ -14,9 +14,20 @@ class LessonSerializer(serializers.ModelSerializer):
 
 
 class UserLessonSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = UserLesson
         fields = '__all__'
+
+
+class DiaryLessonSerializer(serializers.ModelSerializer):
+    admin_name = serializers.CharField(
+        source='lesson.user.username', read_only=True)
+
+    class Meta:
+        model = UserLesson
+        # fields = '__all__'
+        fields = ['id', 'name', 'admin_name', 'date']
 
 
 class BookingSerializer(serializers.ModelSerializer):

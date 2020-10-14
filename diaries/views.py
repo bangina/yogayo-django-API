@@ -19,11 +19,18 @@ class DiaryList(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
-    # def get_queryset(self):
-    #     # 요청하는 사람 리스트만 보여주기
-    #     user = self.request.user
-    #     return Diary.objects.filter(user=user).order_by(
-    #         '-created')
+
+class MyDiaryList(generics.ListCreateAPIView):
+    serializer_class = DiarySerializer
+    #인증방식 : Token
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def get_queryset(self):
+        # 요청하는 사람 리스트만 보여주기
+        user = self.request.user
+        return Diary.objects.filter(user=user).order_by(
+            '-created')
 
 
 class DiaryRetrieveDestroy(generics.RetrieveDestroyAPIView):

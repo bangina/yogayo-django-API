@@ -3,9 +3,9 @@ from django.contrib import admin
 from django.urls import path, include, re_path
 from schema_graph.views import Schema
 from posts.views import PostList, PostRetrieveDestroy, CommentList, Category, MyPostList
-from diaries.views import DiaryList, DiaryRetrieveDestroy, LikeCreate, ImgUploadView
+from diaries.views import DiaryList, DiaryRetrieveDestroy, LikeCreate, ImgUploadView, MyDiaryList
 from users.views import registration_view, UserView, UserUpdateDestroyView
-from bookings.views import LessonList, MyLessonList, LessonUsersList, UserVoucherList, UserLessonCreate
+from bookings.views import LessonList, MyLessonList, LessonUsersList, UserVoucherList, UserLessonCreate, DiaryLessonList
 
 
 from rest_framework import routers, permissions
@@ -37,6 +37,8 @@ urlpatterns = [
     path("api/myinfo/<int:pk>/", UserUpdateDestroyView.as_view()),
     path("api/myvouchers/", UserVoucherList.as_view()),
     path("api/diaries/", DiaryList.as_view()),
+    path("api/diaries/lessons/", DiaryLessonList.as_view()),
+    path("api/diaries/mydiaries/", MyDiaryList.as_view()),
     path("api/diaries/<int:pk>/", DiaryRetrieveDestroy.as_view()),
     path("api/diaries/<int:pk>/upload/", ImgUploadView.as_view()),
     path("api/diaries/<int:pk>/like/", LikeCreate.as_view()),
