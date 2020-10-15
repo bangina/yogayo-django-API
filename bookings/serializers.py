@@ -40,4 +40,4 @@ class BookingSerializer(serializers.ModelSerializer):
     class Meta:
         model = VoucherUser
         fields = ['id', 'status', 'str_date',
-                  'used', 'user', 'vouchername', 'limit', 'adminname']
+                  'used', 'user', 'vouchername', 'limit', 'adminname', 'voucher']
