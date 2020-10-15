@@ -56,6 +56,20 @@ class PostRetrieveDestroy(generics.RetrieveDestroyAPIView):
             raise ValidationError("그쪽 게시물이 아닌데용!!! 못 지우세요!!")
 
 
+class PostUpdate(generics.UpdateAPIView):
+
+    serializer_class = PostSerializer
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    parser_class = (FileUploadParser,)
+
+    def get_queryset(self, **kwargs):
+        print(self.kwargs['pk'])
+        queryset = Post.objects.filter(pk=self.kwargs['pk'])
+        return queryset
+
+
 class CommentList(generics.ListCreateAPIView):
     serializer_class = CommentSerializer
 

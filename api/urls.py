@@ -2,7 +2,7 @@
 from django.contrib import admin
 from django.urls import path, include, re_path
 from schema_graph.views import Schema
-from posts.views import PostList, PostRetrieveDestroy, CommentList, Category, MyPostList
+from posts.views import PostList, PostRetrieveDestroy, CommentList, Category, MyPostList, PostUpdate
 from diaries.views import DiaryList, DiaryRetrieveDestroy, LikeCreate, ImgUploadView, MyDiaryList
 from users.views import registration_view, UserView, UserUpdateDestroyView
 from bookings.views import LessonList, MyLessonList, LessonUsersList, UserVoucherList, UserLessonCreate, DiaryLessonList
@@ -44,6 +44,7 @@ urlpatterns = [
     path("api/diaries/<int:pk>/like/", LikeCreate.as_view()),
     path("api/posts/", PostList.as_view()),  # Post 리스트 뷰
     path("api/posts/<int:pk>/", PostRetrieveDestroy.as_view()),
+    path("api/posts/<int:pk>/update/", PostUpdate.as_view()),
     path("api/posts/<category>/", Category.as_view()),
     path("api/posts/mypost/list/", MyPostList.as_view()),
     path("api/posts/<int:pk>/comment/", CommentList.as_view()),
