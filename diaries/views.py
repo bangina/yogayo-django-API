@@ -7,6 +7,9 @@ from .serializers import DiarySerializer, LikeSerializer
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.views import APIView
 from rest_framework.parsers import FileUploadParser
+from .pagination import PostPageNumberPagination
+
+# 모든 다이어리
 
 
 class DiaryList(generics.ListCreateAPIView):
@@ -15,7 +18,7 @@ class DiaryList(generics.ListCreateAPIView):
     #인증방식 : Token
     authentication_classes = (TokenAuthentication,)
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-
+    pagination_class = PostPageNumberPagination
     parser_class = (FileUploadParser,)
 
     def perform_create(self, serializer):
@@ -31,11 +34,14 @@ class DiaryList(generics.ListCreateAPIView):
         else:
             return Response(file_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+# 내가 쓴 다이어리
+
 
 class MyDiaryList(generics.ListCreateAPIView):
     serializer_class = DiarySerializer
     authentication_classes = (TokenAuthentication,)
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    pagination_class = PostPageNumberPagination
 
     def get_queryset(self):
         # 요청하는 사람 리스트만 보여주기

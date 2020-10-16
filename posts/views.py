@@ -96,6 +96,8 @@ class MyPostList(generics.ListAPIView):
 
 class Category(generics.ListAPIView):
     serializer_class = PostSerializer
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def get_queryset(self):
         return Post.objects.filter(category=self.kwargs['category'])
