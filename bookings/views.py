@@ -86,7 +86,17 @@ class LessonUsersList(generics.ListAPIView):
 
 
 # 사용자 보유한 회원권 뷰
-class UserVoucherList(generics.ListCreateAPIView):
+class UserVoucherList(generics.ListAPIView):
+    serializer_class = BookingSerializer
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def get_queryset(self):
+        user = self.request.user
+        return VoucherUser.objects.filter(user=user)
+
+
+class UserVoucherCreate(generics.CreateAPIView):
     serializer_class = BookingSerializer
     authentication_classes = (TokenAuthentication,)
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
@@ -98,7 +108,8 @@ class UserVoucherList(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         if self.get_queryset().exists():
             raise ValidationError("이미 수강신청하셨어요. :)")
-        serializer.save(user=self.request.user)
+        serializer.save(user=self.request.user,
+                        voucher=Voucher.objects.get(voucherCode=self.kwargs['code']))
 
 
 # 이용권 정보

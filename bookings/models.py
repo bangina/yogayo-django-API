@@ -22,7 +22,7 @@ class Voucher(models.Model):
     # adminUser(센터)
     user = models.ForeignKey(AdminUser, on_delete=models.CASCADE)
     name = models.CharField(max_length=20, blank=True, null=True)
-    duration = models.IntegerField(blank=True, null=True)
+    voucherCode = models.IntegerField(blank=True, null=True, unique=True)
     limit = models.IntegerField(blank=True, null=True)
 
     class Meta:
