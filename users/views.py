@@ -5,6 +5,7 @@ from rest_framework.decorators import api_view
 from rest_framework.authentication import TokenAuthentication
 from .models import User
 from users.serializers import RegistrationSerializer, UserSerializer
+from rest_framework.parsers import FileUploadParser
 
 
 @api_view(['POST', ])
@@ -40,3 +41,14 @@ class UserUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [permissions.IsAuthenticated]
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
+    parser_class = (FileUploadParser,)
+
+    def post(self, request, *args, **kwargs):
+        file_serializer = UserSerializer(data=request.data)
+
+        if file_serializer.is_valid():
+            file_serializer.save()
+            return Response(file_serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(file_serializer.errors, status=status.HTTP_400_BAD_REQUEST)

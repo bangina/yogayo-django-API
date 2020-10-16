@@ -22,14 +22,17 @@ class PostSerializer(serializers.ModelSerializer):
             'views',
             'comments',
         ]
-    
+
     def get_comments(self, post):
         return Comment.objects.filter(post=post).count()
+
 
 class CommentSerializer(serializers.ModelSerializer):
     username = serializers.CharField(
         source='user.username', read_only=True)
+    img_profile = serializers.CharField(
+        source='user.img_profile', read_only=True)
 
     class Meta:
         model = Comment
-        fields = ['post', 'username', 'content', 'created']
+        fields = ['post', 'username', 'content', 'created', 'img_profile']
