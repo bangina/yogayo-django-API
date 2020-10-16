@@ -22,7 +22,6 @@ class DiaryList(generics.ListCreateAPIView):
 
 class MyDiaryList(generics.ListCreateAPIView):
     serializer_class = DiarySerializer
-    #인증방식 : Token
     authentication_classes = (TokenAuthentication,)
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
@@ -48,19 +47,21 @@ class DiaryRetrieveDestroy(generics.RetrieveDestroyAPIView):
             raise ValidationError("그쪽 게시물이 아닌데용!!! 못 지우세요!!")
 
 
-# 투표하기 & un투표하기
-class LikeCreate(generics.CreateAPIView, mixins.DestroyModelMixin):
+# 좋아요 & un좋아요
+class LikeCreate(generics.ListCreateAPIView, mixins.DestroyModelMixin):
     serializer_class = LikeSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = [permissions.AllowAny]
 
     def get_queryset(self):
         user = self.request.user
         diary = Diary.objects.get(pk=self.kwargs['pk'])
         return Like.objects.filter(user=user, diary=diary)
 
-    def perform_create(self, serializer):
+    def perform_create(self, serializer, *args, **kwargs):
         if self.get_queryset().exists():
-            raise ValidationError("이미 좋아요하셨어요! :)")
+            self.get_queryset().delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
         serializer.save(user=self.request.user,
                         diary=Diary.objects.get(pk=self.kwargs['pk']))
 

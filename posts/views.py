@@ -58,7 +58,6 @@ class PostRetrieveDestroy(generics.RetrieveDestroyAPIView):
 
 class CommentList(generics.ListCreateAPIView):
     serializer_class = CommentSerializer
-
     authentication_classes = (TokenAuthentication,)
     permission_classes = [permissions.AllowAny]
 
