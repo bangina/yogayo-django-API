@@ -6,6 +6,8 @@ class PostSerializer(serializers.ModelSerializer):
 
     username = serializers.CharField(
         source='user.username', read_only=True)
+    img_profile = serializers.FileField(
+        source='user.img_profile', read_only=True)
 
     comments = serializers.SerializerMethodField()
 
@@ -14,6 +16,7 @@ class PostSerializer(serializers.ModelSerializer):
         fields = [
             'id',
             'username',
+            'img_profile',
             'category',
             'title',
             'content',

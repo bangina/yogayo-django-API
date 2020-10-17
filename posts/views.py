@@ -38,6 +38,8 @@ class PostList(generics.ListCreateAPIView):
 class PostRetrieveDestroy(generics.RetrieveDestroyAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     # 조회수 1 증가 함수
     def get_queryset(self, **kwargs):
