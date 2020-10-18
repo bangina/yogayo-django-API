@@ -36,7 +36,7 @@ urlpatterns = [
     path("api/myinfo/", UserView.as_view()),
     path("api/myinfo/<int:pk>/", UserUpdateDestroyView.as_view()),
     path("api/myvouchers/", UserVoucherList.as_view()),
-    path("api/myvouchers/<int:code>", UserVoucherCreate.as_view()),
+    path("api/myvouchers/<int:code>/", UserVoucherCreate.as_view()),
     path("api/diaries/", DiaryList.as_view()),
     path("api/diaries/lessons/", DiaryLessonList.as_view()),
     path("api/diaries/mydiaries/", MyDiaryList.as_view()),
