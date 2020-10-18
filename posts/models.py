@@ -20,7 +20,10 @@ class Post(models.Model):
         max_length=10, null=False, choices=Types.choices)
     title = models.CharField(max_length=100, null=False)
     content = models.CharField(max_length=2000, null=False)
-    img_path = models.FileField(max_length=200, null=True, blank=True)
+    img_path1 = models.FileField(max_length=200, null=True, blank=True)
+    img_path2 = models.FileField(max_length=200, null=True, blank=True)
+    img_path3 = models.FileField(max_length=200, null=True, blank=True)
+    img_path4 = models.FileField(max_length=200, null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     views = models.IntegerField(null=False, default=0)
 

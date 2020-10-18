@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from rest_framework import generics, permissions, status, mixins
 from .models import Lesson, UserLesson, VoucherUser, Voucher
+from diaries.models import Diary
 from .serializers import LessonSerializer, UserLessonSerializer, BookingSerializer, DiaryLessonSerializer
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.exceptions import ValidationError
@@ -126,6 +127,15 @@ class DiaryLessonList(generics.ListAPIView):
 
         today = datetime.today()
         yesterday = today + timedelta(days=-1)
+        userLesson = list(UserLesson.objects.filter(
+            date__range=[yesterday, today], user=4))
+        obj = []
 
-        user = self.request.user
-        return UserLesson.objects.filter(date__range=[yesterday, today], user=user)
+        for i in userLesson:
+            if Diary.objects.filter(userLesson=i).exists():
+                obj.append(i)
+
+        for j in obj:
+            userLesson.remove(j)
+
+        return userLesson
