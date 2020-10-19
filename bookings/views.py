@@ -8,6 +8,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 from django.db.models import F
 from datetime import datetime, timedelta
+from random import *
 # 날짜별 수업 목록
 
 
@@ -169,4 +170,12 @@ class VoucherList(generics.ListCreateAPIView):
         return Voucher.objects.filter(user=user)
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        voucherCode = 0
+        while True:
+            code = randint(10000, 99999)
+            if Voucher.objects.filter(voucherCode=code).exists():
+                continue
+            else:
+                voucherCode = code
+                break
+        serializer.save(user=self.request.user, voucherCode=voucherCode)
