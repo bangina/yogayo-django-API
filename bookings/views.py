@@ -145,8 +145,8 @@ class DiaryLessonList(generics.ListAPIView):
 
 class VoucherList(generics.ListCreateAPIView):
     serializer_class = VoucherSerializer
-    # authentication_classes = (TokenAuthentication,)
-    # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def get_queryset(self):
         user = self.request.user
