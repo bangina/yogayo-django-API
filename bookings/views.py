@@ -23,6 +23,22 @@ class LessonList(generics.ListAPIView):
             date=self.kwargs.get("date"))
         return date
 
+# 수업 생성
+
+
+class AdminLessonList(generics.ListCreateAPIView):
+
+    serializer_class = LessonSerializer
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        return Lesson.objects.filter(user=user)
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
 
 # My Lesson List(유저 본인이 신청한 수업들 목록)\
 class MyLessonList(generics.ListCreateAPIView):
@@ -145,8 +161,8 @@ class DiaryLessonList(generics.ListAPIView):
 
 class VoucherList(generics.ListCreateAPIView):
     serializer_class = VoucherSerializer
-    # authentication_classes = (TokenAuthentication,)
-    # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def get_queryset(self):
         user = self.request.user
