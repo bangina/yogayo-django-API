@@ -144,8 +144,9 @@ class DiaryLessonList(generics.ListAPIView):
 
         today = datetime.today()
         yesterday = today + timedelta(days=-1)
+        user = self.request.user
         userLesson = list(UserLesson.objects.filter(
-            date__range=[yesterday, today], user=4))
+            date__range=[yesterday, today], user=user))
         obj = []
 
         for i in userLesson:
