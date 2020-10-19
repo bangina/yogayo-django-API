@@ -41,3 +41,10 @@ class BookingSerializer(serializers.ModelSerializer):
         model = VoucherUser
         fields = ['id', 'status', 'str_date',
                   'used', 'user', 'vouchername', 'limit', 'adminname', 'voucher']
+
+
+class VoucherSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Voucher
+        fields = '__all__'

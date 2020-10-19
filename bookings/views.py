@@ -2,7 +2,7 @@ from django.shortcuts import render
 from rest_framework import generics, permissions, status, mixins
 from .models import Lesson, UserLesson, VoucherUser, Voucher
 from diaries.models import Diary
-from .serializers import LessonSerializer, UserLessonSerializer, BookingSerializer, DiaryLessonSerializer
+from .serializers import LessonSerializer, UserLessonSerializer, BookingSerializer, DiaryLessonSerializer, VoucherSerializer
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
@@ -139,3 +139,18 @@ class DiaryLessonList(generics.ListAPIView):
             userLesson.remove(j)
 
         return userLesson
+
+# 바우쳐 생성
+
+
+class VoucherList(generics.ListCreateAPIView):
+    serializer_class = VoucherSerializer
+    # authentication_classes = (TokenAuthentication,)
+    # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def get_queryset(self):
+        user = self.request.user
+        return Voucher.objects.filter(user=user)
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
