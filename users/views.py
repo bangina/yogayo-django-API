@@ -18,10 +18,13 @@ def registration_view(request):
             data['response'] = 'successfully registered a new user.'
             data['email'] = user.email
             data['username'] = user.username
+            data['phone'] = user.phone
         else:
             data = serializer.errors
         return Response(data)
 
+        # serializer.save(user=self.request.user,
+        #                 voucher=Voucher.objects.get(voucherCode=self.kwargs['code']))
 # 유저 개인 정보 조회
 
 

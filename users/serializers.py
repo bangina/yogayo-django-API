@@ -11,7 +11,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
         user = User(
             email=self.data['email'],
             username=self.data['username'],
-            phone=self.data['phone']
+            phone=self.data['phone'],
         )
         password = self.data['password']
         user.set_password(password)

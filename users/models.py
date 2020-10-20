@@ -34,25 +34,25 @@ class User(AbstractBaseUser):
 
     def has_module_perms(self, app_label):
         return True
- 
+
     class Types(models.TextChoices):
-        GENUSER = "GENUSER", "GenUser"
-        ADMINUSER = "ADMINUSER", "AdminUser"
+        GENUSER = "GENUSER"
+        ADMINUSER = "ADMINUSER"
 
     # 디폴트는 genuser 타입으로 세팅
-    base_type = Types.GENUSER
+    # base_type = Types.GENUSER
 
     # 우리 무슨 유저타입?
     type = models.CharField(max_length=10,
-                            choices=Types.choices, default=base_type)
+                            choices=Types.choices)
     objects = BaseUserManager()
 
     def get_absolute_url(self):
         return reverse("users:detail", kwargs={"pk": self.pk})
 
     def save(self, *args, **kwargs):
-        if not self.id:
-            self.type = self.base_type
+        # if not self.id:
+        #     self.type = self.base_type
         return super().save(*args, **kwargs)
 
     def create_user(self, email, password,  username):
