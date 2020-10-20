@@ -40,19 +40,24 @@ class User(AbstractBaseUser):
         ADMINUSER = "ADMINUSER"
 
     # 디폴트는 genuser 타입으로 세팅
-    # base_type = Types.GENUSER
+    base_type = Types.ADMINUSER
 
     # 우리 무슨 유저타입?
     type = models.CharField(max_length=10,
                             choices=Types.choices)
     objects = BaseUserManager()
 
-    def get_absolute_url(self):
-        return reverse("users:detail", kwargs={"pk": self.pk})
-
     def save(self, *args, **kwargs):
         # if not self.id:
         #     self.type = self.base_type
+        # type:"ADMINUSER" ==>
+        # self.type = Types.ADMINUSER
+        # type:"ADMINUSER" ==>
+        # if User.Types.GENUSER == "GENUSER":
+        #     self.type = self.Types.GENUSER
+        # if self.type == "ADMINUSER":
+        #     self.type = self.Types.ADMINUSER
+        self.type = self.Types.GENUSER
         return super().save(*args, **kwargs)
 
     def create_user(self, email, password,  username):
