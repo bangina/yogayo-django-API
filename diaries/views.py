@@ -12,6 +12,7 @@ from .pagination import PostPageNumberPagination
 # 모든 다이어리
 
 
+
 class DiaryList(generics.ListCreateAPIView):
     serializer_class = DiarySerializer
     queryset = Diary.objects.all().order_by('-created')
@@ -35,8 +36,6 @@ class DiaryList(generics.ListCreateAPIView):
             return Response(file_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 # 내가 쓴 다이어리
-
-
 class MyDiaryList(generics.ListCreateAPIView):
     serializer_class = DiarySerializer
     authentication_classes = (TokenAuthentication,)

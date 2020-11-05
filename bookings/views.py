@@ -52,7 +52,7 @@ class MyLessonList(generics.ListCreateAPIView):
         user = self.request.user
         return UserLesson.objects.filter(user=user)
 
-# 수강신청 & 취소 처리
+# 수강신청 & 취소 처리 View
 
 
 class UserLessonCreate(generics.CreateAPIView, mixins.DestroyModelMixin):
@@ -64,21 +64,21 @@ class UserLessonCreate(generics.CreateAPIView, mixins.DestroyModelMixin):
         user = self.request.user
         lesson = Lesson.objects.get(pk=self.kwargs['pk'])
         return UserLesson.objects.filter(user=user, lesson=lesson)
+# 수강신청 레코드 생성(&회원 수강권 1회 차감 처리)
 
     def perform_create(self, serializer):
         if self.get_queryset().exists():
             raise ValidationError("이미 수강신청하셨어요. :)")
         serializer.save(user=self.request.user,
                         lesson=Lesson.objects.get(pk=self.kwargs['pk']))
-        # 회원 수강권 1회 차감 처리
         voucherUser = VoucherUser.objects.filter(
             user=self.request.user, status=True)
         voucherUser.update(used=F('used') + 1)
-
         # 수강권 모두 소진시 상태 false로 변경
         # voucher = Voucher.objects.filter(voucher_id=voucherUser.voucher)
         # if voucherUser.used == voucher.limit:
         #     voucherUser.update(status=False)
+# 수강신청 레코드 삭제(&회원 수강권 1회 차감 처리)
 
     def delete(self, request, *args, **kwargs):
         if self.get_queryset().exists():
@@ -132,16 +132,15 @@ class UserVoucherCreate(generics.CreateAPIView):
 
 # 이용권 정보
 
-# 다이어리 작성 가능한 수업
-
-
+# 다이어리 작성 가능한 수업 정보 GET View
 class DiaryLessonList(generics.ListAPIView):
     serializer_class = DiaryLessonSerializer
     authentication_classes = (TokenAuthentication,)
     permission_classes = [permissions.AllowAny]
 
+#어제와 오늘 참여한 수업만 필터링.
+#(수련일기는 어제/오늘 참여한 수업만 작성가능함)
     def get_queryset(self):
-
         today = datetime.today()
         yesterday = today + timedelta(days=-1)
         user = self.request.user
